@@ -12,9 +12,9 @@ import (
 const data_file = "data.txt"
 const test_file = "test.txt"
 
-func part_1(input string) int {
-    left := make([]int, 0)
-    right := make([]int, 0)
+func parse_input(input string) (left []int, right []int) {
+    left = make([]int, 0)
+    right = make([]int, 0)
 
     for _, line := range strings.Split(input, "\n") {
         elems := strings.Split(line, "   ")
@@ -33,6 +33,10 @@ func part_1(input string) int {
     slices.Sort(left)
     slices.Sort(right)
 
+    return left, right
+}
+
+func part_1(left []int, right []int) int {
     count := 0
     for i := range len(left) {
         var distance int
@@ -53,8 +57,8 @@ func main() {
 		log.Fatal(err)
 	}
     input := string(data)
-    fmt.Println(input)
-    fmt.Println("Part 1: ", part_1(input))
+    left, right := parse_input(input)
+    fmt.Println("Part 1: ", part_1(left, right))
 }
 
 
