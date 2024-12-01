@@ -3,7 +3,7 @@
 ## Running
 
 ```console
-$ cd day_<NUM>
+$ cd day_XX
 $ go run .
 ```
 
