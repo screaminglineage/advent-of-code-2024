@@ -26,7 +26,6 @@ func parse_input(input string) (left []int, right []int) {
         if (err != nil) {
             break
         }
-        fmt.Println(a, b)
         left = append(left, a)
         right = append(right, b)
     }
@@ -47,8 +46,28 @@ func part_1(left []int, right []int) int {
         }
         count += distance
     }
-
     return count
+}
+
+func part_2(left []int, right []int) int {
+    right_prev := right
+    score := 0
+    for _, num := range left {
+        count := 0
+        for {
+            n, found := slices.BinarySearch(right, num)
+            if (found) {
+                count += 1
+            }
+            if (n+1 > len(right)) {
+                break
+            }
+            right = right[n+1:]
+        }
+        score += num * count
+        right = right_prev
+    }
+    return score
 }
 
 func main() {
@@ -59,6 +78,7 @@ func main() {
     input := string(data)
     left, right := parse_input(input)
     fmt.Println("Part 1: ", part_1(left, right))
+    fmt.Println("Part 2: ", part_2(left, right))
 }
 
 
