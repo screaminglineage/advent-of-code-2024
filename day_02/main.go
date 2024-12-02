@@ -27,7 +27,11 @@ func part_1(input string) int {
         nums := strings.Split(line, " ")
         safe := true
         increasing := false
-        for i := range len(nums) - 1 {
+        for i, _ := range nums {
+            if (i == len(nums) - 1) {
+                break
+            }
+
             current, err := strconv.Atoi(nums[i])
             if (err != nil) {
                 break
@@ -38,9 +42,9 @@ func part_1(input string) int {
             }
 
             diff := current - next
-            if diff < 0 && increasing || diff < 0 && i == 0 {
+            if diff > 0 && increasing || diff > 0 && i == 0 {
                 increasing = true
-            } else if diff > 0 && !increasing || diff > 0 && i == 0 {
+            } else if diff < 0 && !increasing || diff < 0 && i == 0 {
                 increasing = false
             } else {
                 safe = false
@@ -67,49 +71,55 @@ func part_2(input string) int {
     for _, line := range lines {
         nums := strings.Split(line, " ")
         safe := true
-        increasing := false
-        tolerate := 1
-        for i := range len(nums) - 1 {
-            current, err := strconv.Atoi(nums[i])
-            if (err != nil) {
-                break
-            }
-            next, err := strconv.Atoi(nums[i+1])
-            if (err != nil) {
-                break
-            }
+        i := 0
+        j := 1
+        current, err := strconv.Atoi(nums[i])
+        if (err != nil) {
+            panic("Unreachable")
+        }
+        next, err := strconv.Atoi(nums[j])
+        if (err != nil) {
+            panic("Unreachable")
+        }
 
-            diff := current - next
-            if diff < 0 && increasing || diff < 0 && i == 0 {
-                increasing = true
-            } else if diff > 0 && !increasing || diff > 0 && i == 0 {
-                increasing = false
-            } else if (tolerate > 0) {
-                tolerate -= 1
-            } else {
+        increasing := (current - next) < 0
+
+        for {
+            diff := abs(current - next)
+            if diff < 1 || diff > 3 {
                 safe = false
                 break
             }
-            diff = abs(diff)
-            if diff < 1 || diff > 3 {
-                if (tolerate > 0) {
-                    tolerate -= 1
-                } else {
-                    safe = false
-                    break
-                }
+            prev_increasing := increasing
+            if j >= len(nums) - 1 {
+                break
+            }
+            i += 1
+            j += 1
+            current, err = strconv.Atoi(nums[i])
+            if (err != nil) {
+                panic("Unreachable")
+            }
+            next, err = strconv.Atoi(nums[j])
+            if (err != nil) {
+                panic("Unreachable")
+            }
+            increasing = (current - next) < 0
+            if prev_increasing != increasing {
+                safe = false
+                break
             }
         }
-        if safe {
-            fmt.Println(line)
+        if (safe) {
             safe_seqs += 1
         }
     }
     return safe_seqs
 }
 
+
 func main() {
-	data, err := os.ReadFile(test_file)
+	data, err := os.ReadFile(data_file)
 	if err != nil {
 		log.Fatal(err)
 	}
