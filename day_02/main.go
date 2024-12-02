@@ -27,11 +27,7 @@ func part_1(input string) int {
         nums := strings.Split(line, " ")
         safe := true
         increasing := false
-        for i, _ := range nums {
-            if (i == len(nums) - 1) {
-                break
-            }
-
+        for i := range len(nums) - 1 {
             current, err := strconv.Atoi(nums[i])
             if (err != nil) {
                 break
@@ -84,10 +80,10 @@ func part_2(input string) int {
             }
 
             diff := current - next
-            if diff > 0 && !increasing || diff > 0 && i == 0 {
-                increasing = false
-            } else if diff < 0 && increasing || diff < 0 && i == 0 {
+            if diff < 0 && increasing || diff < 0 && i == 0 {
                 increasing = true
+            } else if diff > 0 && !increasing || diff > 0 && i == 0 {
+                increasing = false
             } else if (tolerate > 0) {
                 tolerate -= 1
             } else {
@@ -95,16 +91,17 @@ func part_2(input string) int {
                 break
             }
             diff = abs(diff)
-
-            if diff == 0 && tolerate == 0  || diff > 0 && tolerate > 0 {
-                continue
-            }
             if diff < 1 || diff > 3 {
-                safe = false
-                break
+                if (tolerate > 0) {
+                    tolerate -= 1
+                } else {
+                    safe = false
+                    break
+                }
             }
         }
         if safe {
+            fmt.Println(line)
             safe_seqs += 1
         }
     }
@@ -112,7 +109,7 @@ func part_2(input string) int {
 }
 
 func main() {
-	data, err := os.ReadFile(data_file)
+	data, err := os.ReadFile(test_file)
 	if err != nil {
 		log.Fatal(err)
 	}
