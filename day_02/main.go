@@ -74,7 +74,6 @@ func part_2(input string) int {
     for _, line := range lines {
         nums := strings.Split(line, " ")
         if is_safe(nums) {
-            fmt.Println(nums)
             safe_seqs += 1
             continue
         }
@@ -82,7 +81,6 @@ func part_2(input string) int {
             sliced := append([]string{}, nums[:i]...)
             sliced = append(sliced, nums[i+1:]...)
             if is_safe(sliced) {
-                fmt.Println(nums)
                 safe_seqs += 1
                 break
             }
