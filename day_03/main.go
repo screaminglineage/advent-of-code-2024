@@ -55,18 +55,13 @@ func part_2(input string) int {
         }
 
         do_bounds := do_regex.FindStringIndex(input[:mul_bounds[0]])
-        if do_bounds == nil {
-            if do {
-                sum += eval_mul(input[mul_bounds[0]:mul_bounds[1]])
+        if do_bounds != nil {
+            res := input[do_bounds[0]:do_bounds[1]]
+            if res == "don't()" {
+                do = false
+            } else {
+                do = true
             }
-            input = input[mul_bounds[1]:]
-            continue
-        }
-        res := input[do_bounds[0]:do_bounds[1]]
-        if res == "don't()" {
-            do = false
-        } else {
-            do = true
         }
         if do {
             sum += eval_mul(input[mul_bounds[0]:mul_bounds[1]])
