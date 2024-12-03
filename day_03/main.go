@@ -30,12 +30,7 @@ func part_1(input string) int {
     }
     sum := 0
     for _, expr := range res {
-        nums, _ := strings.CutPrefix(expr, "mul(")
-        nums2, _ := strings.CutSuffix(nums, ")")
-        nums3 := strings.Split(nums2, ",")
-        a, _ := strconv.Atoi(nums3[0])
-        b, _ := strconv.Atoi(nums3[1])
-        sum += a*b
+        sum += eval_mul(expr)
     }
     return sum;
 }
