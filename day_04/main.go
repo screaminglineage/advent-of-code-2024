@@ -33,13 +33,13 @@ func part_1(input string) int {
                 continue
             }
             // left to right
-            if x + len(xmas) <= width {
+            if x + len(xmas) - 1 < width {
                 slice := ""
                 for i := range len(xmas) {
                     slice += string(lines[y][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("left to right", y, x)
                     count += 1
                 }
             }
@@ -51,19 +51,19 @@ func part_1(input string) int {
                     slice += string(lines[y][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("rtl", y, x)
                     count += 1
                 }
             }
 
             // top to bottom
-            if y + len(xmas) <= height {
+            if y + len(xmas) - 1 < height {
                 slice := ""
                 for i := range len(xmas) {
                     slice += string(lines[y+i][x])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("ttb", y, x)
                     count += 1
                 }
             }
@@ -75,19 +75,19 @@ func part_1(input string) int {
                     slice += string(lines[y-i][x])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("btp",y, x)
                     count += 1
                 }
             }
 
             // diagonals
-            if y + len(xmas) <= height && x + len(xmas) <= width {
+            if y + len(xmas) - 1 < height && x + len(xmas) - 1 < width {
                 slice := ""
                 for i := range len(xmas) {
                     slice += string(lines[y+i][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("down-right",y, x)
                     count += 1
                 }
             }
@@ -98,29 +98,29 @@ func part_1(input string) int {
                     slice += string(lines[y-i][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("up-left",y, x)
                     count += 1
                 }
             }
 
-            if y - len(xmas) + 1 >= 0 && x + len(xmas) <= width {
+            if y - len(xmas) + 1 >= 0 && x + len(xmas) - 1 < width {
                 slice := ""
                 for i := range len(xmas) {
                     slice += string(lines[y-i][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("up-right",y, x)
                     count += 1
                 }
             }
 
-            if y + len(xmas) <= height && x - len(xmas) >= 0 {
+            if y + len(xmas) - 1 < height && x - len(xmas) + 1 >= 0 {
                 slice := ""
                 for i := range len(xmas) {
                     slice += string(lines[y+i][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println(y, x)
+                    fmt.Println("down-left",y, x)
                     count += 1
                 }
             }
