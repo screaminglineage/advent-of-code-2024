@@ -122,7 +122,39 @@ func part_1(input string) int {
 }
 
 func part_2(input string) int {
-    return 0
+    lines := parse_input(input)
+    width := len(lines[0])
+    height := len(lines)
+
+    count := 0
+    for y := range height {
+        for x := range width {
+            if lines[y][x] != 'A' {
+                continue
+            }
+            mas_count := 0
+            if y - 1 >= 0 && x - 1 >= 0 && y + 1 < height && x + 1 < width {
+                diag_1 := string(lines[y-1][x-1]) + string(lines[y][x]) + string(lines[y+1][x+1])
+                if diag_1 == "MAS" {
+                    mas_count += 1
+                } else if diag_1 == "SAM" {
+                    mas_count += 1
+                }
+
+                diag_2 := string(lines[y-1][x+1]) + string(lines[y][x]) + string(lines[y+1][x-1])
+                if diag_2 == "MAS" {
+                    mas_count += 1
+                } else if diag_2 == "SAM" {
+                    mas_count += 1
+                }
+            }
+
+            if mas_count == 2 {
+                count += 1
+            }
+        }
+    }
+    return count
 }
 
 func main() {
