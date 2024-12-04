@@ -39,7 +39,6 @@ func part_1(input string) int {
                     slice += string(lines[y][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("left to right", y, x)
                     count += 1
                 }
             }
@@ -51,7 +50,6 @@ func part_1(input string) int {
                     slice += string(lines[y][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("rtl", y, x)
                     count += 1
                 }
             }
@@ -63,7 +61,6 @@ func part_1(input string) int {
                     slice += string(lines[y+i][x])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("ttb", y, x)
                     count += 1
                 }
             }
@@ -75,7 +72,6 @@ func part_1(input string) int {
                     slice += string(lines[y-i][x])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("btp",y, x)
                     count += 1
                 }
             }
@@ -87,7 +83,6 @@ func part_1(input string) int {
                     slice += string(lines[y+i][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("down-right",y, x)
                     count += 1
                 }
             }
@@ -98,7 +93,6 @@ func part_1(input string) int {
                     slice += string(lines[y-i][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("up-left",y, x)
                     count += 1
                 }
             }
@@ -109,7 +103,6 @@ func part_1(input string) int {
                     slice += string(lines[y-i][x+i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("up-right",y, x)
                     count += 1
                 }
             }
@@ -120,7 +113,6 @@ func part_1(input string) int {
                     slice += string(lines[y+i][x-i])
                 }
                 if slice == "XMAS" {
-                    fmt.Println("down-left",y, x)
                     count += 1
                 }
             }
