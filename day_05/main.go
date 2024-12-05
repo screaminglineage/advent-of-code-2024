@@ -90,9 +90,7 @@ func part_2(page_orderings map[int][]int, pages [][]int) int {
         for {
             if i, j, correct := is_correct(page_orderings, update); !correct {
                 incorrect = true
-                tmp := update[i]
-                update[i] = update[j]
-                update[j] = tmp
+                update[i], update[j] = update[j], update[i]
             } else {
                 break
             }
