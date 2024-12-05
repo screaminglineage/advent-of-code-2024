@@ -83,7 +83,6 @@ func part_1(page_orderings map[int][]int, pages [][]int) int {
 }
 
 
-// TODO: try part 2 using topological sorting
 func part_2(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
     for _, update := range pages {        
