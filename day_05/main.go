@@ -54,28 +54,27 @@ func parse_input(input string) (map[int][]int, [][]int) {
     return page_orderings, pages
 }
 
-func is_correct(page_orderings map[int][]int, update []int) bool {
-    is_correct := true
+// returns the indices which fail the check
+func is_correct(page_orderings map[int][]int, update []int) (a int, b int, is_correct bool) {
     for i, page := range update {
         afters := page_orderings[page]
         for _, after := range afters {
             index := slices.Index(update, after)
             if index != -1 && index < i {
+                a = index
+                b = i
                 is_correct = false
-                break
+                return
             }
         }
-        if !is_correct {
-            break
-        }
     }
-    return is_correct
+    return -1, -1, true
 }
 
 func part_1(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
     for _, update := range pages {
-        if is_correct(page_orderings, update) {
+        if _, _, correct := is_correct(page_orderings, update); correct {
             a := update[len(update)/2]
             sum += a
         }
@@ -83,34 +82,21 @@ func part_1(page_orderings map[int][]int, pages [][]int) int {
     return sum
 }
 
-func check_correct_and_fix(page_orderings map[int][]int, update []int) bool {
-    is_correct := true
-    for i, page := range update {
-        afters := page_orderings[page]
-        for _, after := range afters {
-            index := slices.Index(update, after)
-            if index != -1 && index < i {
-                tmp := update[i]
-                update[i] = update[index]
-                update[index] = tmp
-                is_correct = false
-                break
-            }
-        }
-        if !is_correct {
-            break
-        }
-    }
-    return is_correct
-}
 
 // TODO: try part 2 using topological sorting
 func part_2(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
-    for _, update := range pages {
+    for _, update := range pages {        
         incorrect := false
-        for !check_correct_and_fix(page_orderings, update) {
-            incorrect = true
+        for {
+            if i, j, correct := is_correct(page_orderings, update); !correct {
+                incorrect = true
+                tmp := update[i]
+                update[i] = update[j]
+                update[j] = tmp
+            } else {
+                break
+            }
         }
         if incorrect {
             a := update[len(update)/2]
