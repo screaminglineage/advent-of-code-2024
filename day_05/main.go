@@ -12,12 +12,8 @@ import (
 const data_file = "data.txt"
 const test_file = "test.txt"
 
-type PageOrdering struct {
-    before, after int
-}
-
-func parse_input(input string) ([]PageOrdering, [][]int) {
-    rules := make([]PageOrdering, 0)
+func parse_input(input string) (map[int][]int, [][]int) {
+    page_orderings := make(map[int][]int)
     lines := strings.Split(input, "\n")
     var j int
     for i, line := range lines {
@@ -34,7 +30,12 @@ func parse_input(input string) ([]PageOrdering, [][]int) {
         if (err != nil) {
             break
         }
-        rules = append(rules, PageOrdering{before, after})
+        if _, found := page_orderings[before]; !found {
+            page_orderings[before] = make([]int, 1)
+            page_orderings[before][0] = after
+        } else {
+            page_orderings[before] = append(page_orderings[before], after)
+        }
     }
 
     pages := make([][]int, 0)
@@ -50,23 +51,13 @@ func parse_input(input string) ([]PageOrdering, [][]int) {
         }
         pages = append(pages, p)
     }
-    return rules, pages
+    return page_orderings, pages
 }
 
-func get_afters(rules []PageOrdering, page int) []int {
-    afters := make([]int, 0)
-    for _, rule := range rules {
-        if rule.before == page {
-            afters = append(afters, rule.after)
-        }
-    }
-    return afters
-}
-
-func is_correct(rules []PageOrdering, update []int) bool {
+func is_correct(page_orderings map[int][]int, update []int) bool {
     is_correct := true
     for i, page := range update {
-        afters := get_afters(rules, page)
+        afters := page_orderings[page]
         for _, after := range afters {
             index := slices.Index(update, after)
             if index != -1 && index < i {
@@ -81,10 +72,10 @@ func is_correct(rules []PageOrdering, update []int) bool {
     return is_correct
 }
 
-func part_1(rules []PageOrdering, pages [][]int) int {
+func part_1(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
     for _, update := range pages {
-        if is_correct(rules, update) {
+        if is_correct(page_orderings, update) {
             a := update[len(update)/2]
             sum += a
         }
@@ -92,10 +83,10 @@ func part_1(rules []PageOrdering, pages [][]int) int {
     return sum
 }
 
-func check_correct_and_fix(rules []PageOrdering, update []int) bool {
+func check_correct_and_fix(page_orderings map[int][]int, update []int) bool {
     is_correct := true
     for i, page := range update {
-        afters := get_afters(rules, page)
+        afters := page_orderings[page]
         for _, after := range afters {
             index := slices.Index(update, after)
             if index != -1 && index < i {
@@ -114,11 +105,11 @@ func check_correct_and_fix(rules []PageOrdering, update []int) bool {
 }
 
 // TODO: try part 2 using topological sorting
-func part_2(rules []PageOrdering, pages [][]int) int {
+func part_2(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
     for _, update := range pages {
         incorrect := false
-        for !check_correct_and_fix(rules, update) {
+        for !check_correct_and_fix(page_orderings, update) {
             incorrect = true
         }
         if incorrect {
