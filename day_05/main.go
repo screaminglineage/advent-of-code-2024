@@ -86,7 +86,6 @@ func part_1(rules []PageOrdering, pages [][]int) int {
     for _, update := range pages {
         if is_correct(rules, update) {
             a := update[len(update)/2]
-            fmt.Println(a)
             sum += a
         }
     }
@@ -124,7 +123,6 @@ func part_2(rules []PageOrdering, pages [][]int) int {
         }
         if incorrect {
             a := update[len(update)/2]
-            fmt.Println(a)
             sum += a
         }
     }
