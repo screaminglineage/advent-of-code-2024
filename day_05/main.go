@@ -93,8 +93,42 @@ func part_1(rules []PageOrdering, pages [][]int) int {
     return sum
 }
 
+func check_correct_and_fix(rules []PageOrdering, update []int) bool {
+    is_correct := true
+    for i, page := range update {
+        afters := get_afters(rules, page)
+        for _, after := range afters {
+            index := slices.Index(update, after)
+            if index != -1 && index < i {
+                tmp := update[i]
+                update[i] = update[index]
+                update[index] = tmp
+                is_correct = false
+                break
+            }
+        }
+        if !is_correct {
+            break
+        }
+    }
+    return is_correct
+}
+
+// TODO: try part 2 using topological sorting
 func part_2(rules []PageOrdering, pages [][]int) int {
-    return 0;
+    sum := 0
+    for _, update := range pages {
+        incorrect := false
+        for !check_correct_and_fix(rules, update) {
+            incorrect = true
+        }
+        if incorrect {
+            a := update[len(update)/2]
+            fmt.Println(a)
+            sum += a
+        }
+    }
+    return sum
 }
 
 func main() {
