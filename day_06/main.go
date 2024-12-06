@@ -112,6 +112,7 @@ func detect_cycles(g Grid, start Point) bool {
             break
         }
 
+
         for g.grid[next_hare.y][next_hare.x] == '#' {
             dir_hare = (dir_hare + 1) % len(dirs)
             next_hare = Point{next_hare_1.y + dirs[dir_hare].y, next_hare_1.x + dirs[dir_hare].x}
@@ -135,7 +136,7 @@ func detect_cycles(g Grid, start Point) bool {
 
         current_hare = next_hare
         current_tort = next_tort
-        if current_hare.x == current_tort.x && current_hare.y == current_tort.y {
+        if current_hare.x == current_tort.x && current_hare.y == current_tort.y && dirs[dir_hare].x == dirs[dir_tort].x && dirs[dir_hare].y == dirs[dir_tort].y { 
             return true
         }
     }
@@ -177,7 +178,7 @@ func part_2(g Grid, start Point) int {
 
 
 func main() {
-    data, err := os.ReadFile(test_file)
+    data, err := os.ReadFile(data_file)
     if err != nil {
         log.Fatal(err)
     }
