@@ -85,7 +85,7 @@ func part_1(page_orderings map[int][]int, pages [][]int) int {
 
 func part_2(page_orderings map[int][]int, pages [][]int) int {
     sum := 0
-    for _, update := range pages {        
+    for _, update := range pages {
         incorrect := false
         for {
             if i, j, correct := is_correct(page_orderings, update); !correct {
