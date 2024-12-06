@@ -142,8 +142,37 @@ func detect_cycles(g Grid, start Point) bool {
     return false
 }
 
-func part_2(g Grid, start Point) int {
+func print_grid(g Grid, start Point) int {
+    for y := range g.grid {
+        for x := range g.grid[y] {
+            if start.x == x && start.y == y {
+                fmt.Print("^")
+            } else {
+                fmt.Print(string(g.grid[y][x]))
+            }
+        }
+        fmt.Println()
+    }
+    fmt.Println("###############################")
     return 0
+}
+
+func part_2(g Grid, start Point) int {
+    count := 0
+    for y := range g.grid {
+        for x := range g.grid[y] {
+            if (start.x == x && start.y == y) || g.grid[y][x] == '#' {
+                continue
+            }
+            old := g.grid[y][x]
+            g.grid[y][x] = '#'
+            if detect_cycles(g, start) {
+                count += 1
+            }
+            g.grid[y][x] = old
+        }
+    }
+    return count
 }
 
 
@@ -154,7 +183,7 @@ func main() {
     }
     input := string(data)
     grid, start := parse_input(input)
-    // fmt.Println("Part 1: ", part_1(grid, start))
+    fmt.Println("Part 1: ", part_1(grid, start))
     fmt.Println("Part 2: ", part_2(grid, start))
 }
 
