@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
+    "log"
     "strings"
     "fmt"
-	"os"
+    "os"
 )
 
 const data_file = "data.txt"
@@ -80,18 +80,81 @@ func part_1(g Grid, start Point) int {
 }
 
 
+func detect_cycles(g Grid, start Point) bool {
+    dirs := []Point{
+        {-1, 0},    // up
+        {0, 1},     // right
+        {1, 0},     // down
+        {0, -1},    // left
+    }
+
+    current_hare := start
+    current_tort := start
+    dir_hare := 0
+    dir_tort := 0
+
+    for {
+        next_hare_1 := Point{current_hare.y + dirs[dir_hare].y, current_hare.x + dirs[dir_hare].x}
+        if next_hare_1.x >= g.cols || next_hare_1.x < 0 || next_hare_1.y >= g.rows || next_hare_1.y < 0 {
+            break
+        }
+
+        for g.grid[next_hare_1.y][next_hare_1.x] == '#' {
+            dir_hare = (dir_hare + 1) % len(dirs)
+            next_hare_1 = Point{current_hare.y + dirs[dir_hare].y, current_hare.x + dirs[dir_hare].x}
+            if next_hare_1.x >= g.cols || next_hare_1.x < 0 || next_hare_1.y >= g.rows || next_hare_1.y < 0 {
+                break
+            }
+        }
+
+        next_hare := Point{next_hare_1.y + dirs[dir_hare].y, next_hare_1.x + dirs[dir_hare].x}
+        if next_hare.x >= g.cols || next_hare.x < 0 || next_hare.y >= g.rows || next_hare.y < 0 {
+            break
+        }
+
+        for g.grid[next_hare.y][next_hare.x] == '#' {
+            dir_hare = (dir_hare + 1) % len(dirs)
+            next_hare = Point{next_hare_1.y + dirs[dir_hare].y, next_hare_1.x + dirs[dir_hare].x}
+            if next_hare.x >= g.cols || next_hare.x < 0 || next_hare.y >= g.rows || next_hare.y < 0 {
+                break
+            }
+        }
+
+        next_tort := Point{current_tort.y + dirs[dir_tort].y, current_tort.x + dirs[dir_tort].x}
+        if next_tort.x >= g.cols || next_tort.x < 0 || next_tort.y >= g.rows || next_tort.y < 0 {
+            break
+        }
+
+        for g.grid[next_tort.y][next_tort.x] == '#' {
+            dir_tort = (dir_tort + 1) % len(dirs)
+            next_tort = Point{current_tort.y + dirs[dir_tort].y, current_tort.x + dirs[dir_tort].x}
+            if next_tort.x >= g.cols || next_tort.x < 0 || next_tort.y >= g.rows || next_tort.y < 0 {
+                break
+            }
+        }
+
+        current_hare = next_hare
+        current_tort = next_tort
+        if current_hare.x == current_tort.x && current_hare.y == current_tort.y {
+            return true
+        }
+    }
+    return false
+}
+
 func part_2(g Grid, start Point) int {
     return 0
 }
 
+
 func main() {
-	data, err := os.ReadFile(data_file)
-	if err != nil {
-		log.Fatal(err)
-	}
+    data, err := os.ReadFile(test_file)
+    if err != nil {
+        log.Fatal(err)
+    }
     input := string(data)
     grid, start := parse_input(input)
-    fmt.Println("Part 1: ", part_1(grid, start))
+    // fmt.Println("Part 1: ", part_1(grid, start))
     fmt.Println("Part 2: ", part_2(grid, start))
 }
 
