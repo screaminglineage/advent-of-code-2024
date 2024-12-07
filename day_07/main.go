@@ -4,6 +4,7 @@ import (
 	"log"
     "strings"
     "strconv"
+    "math"
     "fmt"
 	"os"
 )
@@ -49,9 +50,11 @@ func calc(nums []int, op string, operators []string, acc int, target int) bool {
     }
     var new_value int
     switch op {
-        case "+":   new_value = acc + nums[1]
-        case "*":   new_value = acc * nums[1]
-        case "||":  new_value, _ = strconv.Atoi(fmt.Sprintf("%d%d", acc, nums[1]))
+        case "+": new_value = acc + nums[1]
+        case "*": new_value = acc * nums[1]
+        case "||":
+            n := int(math.Ceil(math.Log10(float64(nums[1] + 1))))
+            new_value = acc * int(math.Pow10(n)) + nums[1]
     }
     for _, op := range operators {
         if calc(nums[1:], op, operators, new_value, target) {
