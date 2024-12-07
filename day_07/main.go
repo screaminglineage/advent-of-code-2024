@@ -11,8 +11,6 @@ import (
 const data_file = "data.txt"
 const test_file = "test.txt"
 
-
-
 type Equation struct {
     nums []int
     target int
@@ -63,8 +61,7 @@ func calc(nums []int, op string, operators []string, acc int, target int) bool {
     return false
 }
 
-func part_1(equations []Equation) int {
-    operators := []string{"+", "*"}
+func correct_sum(equations []Equation, operators []string) int {
     sum := 0
     for _, equation := range equations {
         for _, op := range operators {
@@ -77,18 +74,12 @@ func part_1(equations []Equation) int {
     return sum
 }
 
+func part_1(equations []Equation) int {
+    return correct_sum(equations, []string{"+", "*"})
+}
+
 func part_2(equations []Equation) int {
-    operators := []string{"+", "*", "||"}
-    sum := 0
-    for _, equation := range equations {
-        for _, op := range operators {
-            if calc(equation.nums, op, operators, equation.nums[0], equation.target) {
-                sum += equation.target
-                break
-            }
-        }
-    }
-    return sum
+    return correct_sum(equations, []string{"+", "*", "||"})
 }
 
 
