@@ -49,9 +49,9 @@ func calc(nums []int, op string, operators []string, acc int, target int) bool {
     }
     var new_value int
     switch op {
-        case "+": new_value = acc + nums[1]
-        case "*": new_value = acc * nums[1]
-        case "||": new_value, _ = strconv.Atoi(fmt.Sprintf("%d%d", acc, nums[1]))
+        case "+":   new_value = acc + nums[1]
+        case "*":   new_value = acc * nums[1]
+        case "||":  new_value, _ = strconv.Atoi(fmt.Sprintf("%d%d", acc, nums[1]))
     }
     for _, op := range operators {
         if calc(nums[1:], op, operators, new_value, target) {
