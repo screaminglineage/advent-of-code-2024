@@ -53,6 +53,7 @@ func calc(nums []int, op string, operators []string, acc int, target int) bool {
     switch op {
         case "+": new_value = acc + nums[1]
         case "*": new_value = acc * nums[1]
+        case "||": new_value, _ = strconv.Atoi(fmt.Sprintf("%d%d", acc, nums[1]))
     }
     for _, op := range operators {
         if calc(nums[1:], op, operators, new_value, target) {
@@ -76,8 +77,18 @@ func part_1(equations []Equation) int {
     return sum
 }
 
-func part_2(input string) int {
-    return 0
+func part_2(equations []Equation) int {
+    operators := []string{"+", "*", "||"}
+    sum := 0
+    for _, equation := range equations {
+        for _, op := range operators {
+            if calc(equation.nums, op, operators, equation.nums[0], equation.target) {
+                sum += equation.target
+                break
+            }
+        }
+    }
+    return sum
 }
 
 
@@ -89,7 +100,7 @@ func main() {
     input := string(data)
     equations := parse_input(input)
     fmt.Println("Part 1: ", part_1(equations))
-    fmt.Println("Part 2: ", part_2(input))
+    fmt.Println("Part 2: ", part_2(equations))
 }
 
 
