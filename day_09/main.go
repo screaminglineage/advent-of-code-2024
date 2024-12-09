@@ -63,17 +63,64 @@ func part_1(file_blocks []int) int {
 }
 
 func part_2(file_blocks []int) int {
-    return 0;
+    last := len(file_blocks) - 1
+
+    start := slices.Index(file_blocks, -1)
+    for start < last {
+        for file_blocks[last] == -1 {
+            last -= 1
+        }
+        file_id := file_blocks[last]
+        count := 0
+        for file_blocks[last] == file_id {
+            last -= 1
+            count += 1
+        }
+        fmt.Println(file_id, count)
+
+        found := false
+        for start < last {
+            free_space_count := 0
+            next := start
+            for start < last && file_blocks[next] == -1 {
+                next += 1
+                free_space_count += 1
+            }
+            if free_space_count >= count {
+                found = true
+                break
+            }
+            start = next + slices.Index(file_blocks[next:], -1)
+        }
+
+        if found {
+            fmt.Println(start)
+            for i := range(count) {
+                file_blocks[start + i], file_blocks[last + i + 1] = file_blocks[last + i + 1], file_blocks[start + i]
+            }
+        } else {
+            start = slices.Index(file_blocks, -1)
+        }
+    }
+    fmt.Println(file_blocks)
+
+    sum := 0
+    for i, num := range file_blocks {
+        if num != -1 {
+            sum += i*num
+        }
+    }
+    return sum
 }
 
 func main() {
-	data, err := os.ReadFile(data_file)
+	data, err := os.ReadFile(test_file)
 	if err != nil {
 		log.Fatal(err)
 	}
     input := string(data)
     file_blocks := parse_input(input)
-    fmt.Println("Part 1: ", part_1(file_blocks))
+    fmt.Println("Part 1: ", part_1(slices.Clone(file_blocks)))
     fmt.Println("Part 2: ", part_2(file_blocks))
 }
 
