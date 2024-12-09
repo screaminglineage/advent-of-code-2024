@@ -10,4 +10,5 @@ $ go run .
 ## Unfinished Days
 
 - [ ] Day 8
+- [ ] Day 9 Part 2
 
