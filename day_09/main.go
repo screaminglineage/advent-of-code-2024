@@ -67,16 +67,15 @@ func part_2(file_blocks []int) int {
 
     start := slices.Index(file_blocks, -1)
     for start < last {
-        for file_blocks[last] == -1 {
+        for last > -1 && file_blocks[last] == -1 {
             last -= 1
         }
         file_id := file_blocks[last]
         count := 0
-        for file_blocks[last] == file_id {
+        for last > -1 && file_blocks[last] == file_id {
             last -= 1
             count += 1
         }
-        fmt.Println(file_id, count)
 
         found := false
         for start < last {
@@ -94,7 +93,6 @@ func part_2(file_blocks []int) int {
         }
 
         if found {
-            fmt.Println(start)
             for i := range(count) {
                 file_blocks[start + i], file_blocks[last + i + 1] = file_blocks[last + i + 1], file_blocks[start + i]
             }
@@ -102,7 +100,7 @@ func part_2(file_blocks []int) int {
             start = slices.Index(file_blocks, -1)
         }
     }
-    fmt.Println(file_blocks)
+    // fmt.Println(file_blocks)
 
     sum := 0
     for i, num := range file_blocks {
@@ -114,7 +112,7 @@ func part_2(file_blocks []int) int {
 }
 
 func main() {
-	data, err := os.ReadFile(test_file)
+	data, err := os.ReadFile(data_file)
 	if err != nil {
 		log.Fatal(err)
 	}
