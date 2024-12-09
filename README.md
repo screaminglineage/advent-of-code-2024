@@ -7,3 +7,7 @@ $ cd day_XX
 $ go run .
 ```
 
+## Unfinished Days
+
+- [ ] Day 8
+
