@@ -20,8 +20,9 @@ type Grid struct {
 }
 
 
-func parse_input(input string) (g Grid, starts []Point) {
+func parse_input(input string) (g Grid, starts []Point, ends []Point) {
     starts = make([]Point, 0)
+    ends = make([]Point, 0)
     grid := make([][]int, 0)
     lines := strings.Split(input, "\n")
     for y, line := range lines {
@@ -38,12 +39,14 @@ func parse_input(input string) (g Grid, starts []Point) {
             row = append(row, num)
             if num == 0 {
                 starts = append(starts, Point{y,x})
+            } else if num == 9 {
+                ends = append(ends, Point{y,x})
             }
         }
         grid = append(grid, row)
     }
     g = Grid{len(lines) - 1, len(lines[0]), grid}
-    return g, starts
+    return g, starts, ends
 }
 
 
@@ -120,8 +123,44 @@ func part_1(g Grid, starts []Point) int {
     return sum
 }
 
-func part_2(g Grid, starts []Point) int {
-    return 0
+func part_2(g Grid, starts []Point, ends []Point) int {
+    dirs := []Point{
+        {-1, 0},    // up
+        {0, 1},     // right
+        {1, 0},     // down
+        {0, -1},    // left
+    }
+    sum := 0
+    for _, start := range starts {
+        count := 0
+        for _, end := range ends {
+            queue := make([]Point, 1)
+            queue[0] = start
+
+            for len(queue) > 0 {
+                current := queue[0]
+                queue = queue[1:]
+
+                if current == end {
+                    count += 1
+                    continue
+                }
+
+                for _, dir := range dirs {
+                    next := current.add(dir)
+                    if next.x >= g.cols || next.x < 0 || next.y >= g.rows || next.y < 0 {
+                        continue
+                    }
+                    if g.grid[next.y][next.x] - g.grid[current.y][current.x] != 1 {
+                        continue
+                    }
+                    queue = append(queue, next)
+                }
+            }
+        }
+        sum += count
+    }
+    return sum
 }
 
 func main() {
@@ -130,9 +169,9 @@ func main() {
         log.Fatal(err)
     }
     input := string(data)
-    grid, starts := parse_input(input)
+    grid, starts, ends := parse_input(input)
     fmt.Println("Part 1: ", part_1(grid, starts))
-    fmt.Println("Part 2: ", part_2(grid, starts))
+    fmt.Println("Part 2: ", part_2(grid, starts, ends))
 }
 
 
