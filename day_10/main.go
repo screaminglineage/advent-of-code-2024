@@ -50,22 +50,6 @@ func parse_input(input string) (g Grid, starts []Point, ends []Point) {
 }
 
 
-
-func print_grid(g Grid, start Point) int {
-    for y := range g.grid {
-        for x := range g.grid[y] {
-            if start.x == x && start.y == y {
-                fmt.Print("^")
-            } else {
-                fmt.Print(string(g.grid[y][x]))
-            }
-        }
-        fmt.Println()
-    }
-    fmt.Println("###############################")
-    return 0
-}
-
 var Empty struct{}
 
 func (p1 Point) add(p2 Point) Point {
