@@ -107,42 +107,49 @@ func part_1(g Grid, starts []Point) int {
     return sum
 }
 
-func part_2(g Grid, starts []Point, ends []Point) int {
+func traverse_trail_2(g Grid, start Point, end Point) int {
+    rating := 0
     dirs := []Point{
         {-1, 0},    // up
         {0, 1},     // right
         {1, 0},     // down
         {0, -1},    // left
     }
+    queue := make([]Point, 1)
+    queue[0] = start
+
+    for len(queue) > 0 {
+        current := queue[0]
+        queue = queue[1:]
+
+        if current == end {
+            rating += 1
+            continue
+        }
+
+        for _, dir := range dirs {
+            next := current.add(dir)
+            if next.x >= g.cols || next.x < 0 || next.y >= g.rows || next.y < 0 {
+                continue
+            }
+            if g.grid[next.y][next.x] - g.grid[current.y][current.x] != 1 {
+                continue
+            }
+            queue = append(queue, next)
+        }
+    }
+    return rating
+}
+
+
+func part_2(g Grid, starts []Point, ends []Point) int {
     sum := 0
     for _, start := range starts {
-        count := 0
+        ratings := 0
         for _, end := range ends {
-            queue := make([]Point, 1)
-            queue[0] = start
-
-            for len(queue) > 0 {
-                current := queue[0]
-                queue = queue[1:]
-
-                if current == end {
-                    count += 1
-                    continue
-                }
-
-                for _, dir := range dirs {
-                    next := current.add(dir)
-                    if next.x >= g.cols || next.x < 0 || next.y >= g.rows || next.y < 0 {
-                        continue
-                    }
-                    if g.grid[next.y][next.x] - g.grid[current.y][current.x] != 1 {
-                        continue
-                    }
-                    queue = append(queue, next)
-                }
-            }
+            ratings += traverse_trail_2(g, start, end)
         }
-        sum += count
+        sum += ratings
     }
     return sum
 }
