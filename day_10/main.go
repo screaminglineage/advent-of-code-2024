@@ -19,6 +19,12 @@ type Grid struct {
     grid [][]int
 }
 
+var DIRS = [4]Point{
+    {-1, 0},    // up
+    {0, 1},     // right
+    {1, 0},     // down
+    {0, -1},    // left
+}
 
 func parse_input(input string) (g Grid, starts []Point, ends []Point) {
     starts = make([]Point, 0)
@@ -57,12 +63,6 @@ func (p1 Point) add(p2 Point) Point {
 }
 
 func traverse_trail(g Grid, start Point) int {
-    dirs := []Point{
-        {-1, 0},    // up
-        {0, 1},     // right
-        {1, 0},     // down
-        {0, -1},    // left
-    }
     visited := make(map[Point]struct{})
     queue := make([]Point, 1)
     queue[0] = start
@@ -82,7 +82,7 @@ func traverse_trail(g Grid, start Point) int {
             continue
         }
 
-        for _, dir := range dirs {
+        for _, dir := range DIRS {
             next := current.add(dir)
             if next.x >= g.cols || next.x < 0 || next.y >= g.rows || next.y < 0 {
                 continue
@@ -109,12 +109,6 @@ func part_1(g Grid, starts []Point) int {
 
 func traverse_trail_2(g Grid, start Point, end Point) int {
     rating := 0
-    dirs := []Point{
-        {-1, 0},    // up
-        {0, 1},     // right
-        {1, 0},     // down
-        {0, -1},    // left
-    }
     queue := make([]Point, 1)
     queue[0] = start
 
@@ -127,7 +121,7 @@ func traverse_trail_2(g Grid, start Point, end Point) int {
             continue
         }
 
-        for _, dir := range dirs {
+        for _, dir := range DIRS {
             next := current.add(dir)
             if next.x >= g.cols || next.x < 0 || next.y >= g.rows || next.y < 0 {
                 continue
