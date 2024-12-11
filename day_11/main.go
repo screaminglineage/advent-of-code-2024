@@ -65,15 +65,62 @@ func part_1(nums []int) int {
             }
         }
     }
-
-
     return l.Len()
 }
 
-func part_2(nums []int) int {
-    return 0;
-}
 
+func part_2(nums []int) int {
+    data := make(map[int]int)
+    for _, num := range nums {
+        if _, found := data[num]; found {
+            data[num] += 1
+        } else {
+            data[num] = 1
+        }
+    }
+
+    next := make(map[int]int)
+    for i := range 75 {
+        for val, count := range data {
+            if val == 0 {
+                if _, found := next[1]; found {
+                    next[1] += count
+                } else {
+                    next[1] = count
+                }
+            } else if a, b, even := even_digits(val); even {
+                if _, found := next[a]; found {
+                    next[a] += count
+                } else {
+                    next[a] = count
+                }
+                if _, found := next[b]; found {
+                    next[b] += count
+                } else {
+                    next[b] = count
+                }
+                if val == 72 && i == 4 {
+                    fmt.Println(next[2])
+                }
+            } else {
+                num := val*2024
+                if _, found := next[num]; found {
+                    next[num] += count
+                } else {
+                    next[num] = count
+                }
+            }
+        }
+        next, data = data, next
+        next = make(map[int]int)
+    }
+
+    sum := 0
+    for _, v := range data {
+        sum += v
+    }
+    return sum
+}
 
 func main() {
     data, err := os.ReadFile(data_file)
