@@ -64,10 +64,6 @@ func part_1(nums []int) int {
                 e.Value = val
             }
         }
-        // for e:=l.Front(); e!=nil; e= e.Next() {
-        //     fmt.Printf("%d ", e.Value)
-        // }
-        // fmt.Println()
     }
 
 
