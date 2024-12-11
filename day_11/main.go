@@ -5,7 +5,6 @@ import (
     "strings"
     "math"
     "strconv"
-    "container/list"
     "fmt"
     "os"
 )
@@ -41,46 +40,9 @@ func even_digits(num int) (first int, second int, has_even bool)  {
     return
 }
 
-
-
-func part_1(nums []int) int {
-    l := list.New()
-    for _, num := range nums {
-        l.PushBack(num)
-    }
-
-    for _ = range 25 {
-        for e := l.Front(); e != nil; e = e.Next() {
-            val, _ := e.Value.(int)
-            if val == 0 {
-                e.Value = 1
-            } else if a, b, even := even_digits(val); even {
-                l.InsertBefore(a, e)
-                new_e := l.InsertAfter(b, e)
-                l.Remove(e)
-                e = new_e
-            } else {
-                val *= 2024
-                e.Value = val
-            }
-        }
-    }
-    return l.Len()
-}
-
-
-func part_2(nums []int) int {
-    data := make(map[int]int)
-    for _, num := range nums {
-        if _, found := data[num]; found {
-            data[num] += 1
-        } else {
-            data[num] = 1
-        }
-    }
-
+func count_stones(blinks int, data map[int]int) int {
     next := make(map[int]int)
-    for i := range 75 {
+    for i := range blinks {
         for val, count := range data {
             if val == 0 {
                 if _, found := next[1]; found {
@@ -121,6 +83,31 @@ func part_2(nums []int) int {
     }
     return sum
 }
+
+func part_1(nums []int) int {
+    data := make(map[int]int)
+    for _, num := range nums {
+        if _, found := data[num]; found {
+            data[num] += 1
+        } else {
+            data[num] = 1
+        }
+    }
+    return count_stones(25, data)
+}
+
+func part_2(nums []int) int {
+    data := make(map[int]int)
+    for _, num := range nums {
+        if _, found := data[num]; found {
+            data[num] += 1
+        } else {
+            data[num] = 1
+        }
+    }
+    return count_stones(75, data)
+}
+
 
 func main() {
     data, err := os.ReadFile(data_file)
