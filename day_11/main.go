@@ -12,8 +12,8 @@ import (
 const data_file = "data.txt"
 const test_file = "test.txt"
 
-func parse_input(input string) []int {
-    nums := make([]int, 0)
+func parse_input(input string) map[int]int {
+    data := make(map[int]int)
     input = strings.TrimSuffix(input, "\n")
     for _, num_str := range strings.Split(input, " ") {
         num, err := strconv.Atoi(num_str)
@@ -21,10 +21,13 @@ func parse_input(input string) []int {
             fmt.Printf("Got `%s`", num_str)
             panic("Unreachable, input should be correct")
         }
-
-        nums = append(nums, num)
+        if _, found := data[num]; found {
+            data[num] += 1
+        } else {
+            data[num] = 1
+        }
     }
-    return nums
+    return data
 }
 
 
@@ -84,27 +87,11 @@ func count_stones(blinks int, data map[int]int) int {
     return sum
 }
 
-func part_1(nums []int) int {
-    data := make(map[int]int)
-    for _, num := range nums {
-        if _, found := data[num]; found {
-            data[num] += 1
-        } else {
-            data[num] = 1
-        }
-    }
+func part_1(data map[int]int) int {
     return count_stones(25, data)
 }
 
-func part_2(nums []int) int {
-    data := make(map[int]int)
-    for _, num := range nums {
-        if _, found := data[num]; found {
-            data[num] += 1
-        } else {
-            data[num] = 1
-        }
-    }
+func part_2(data map[int]int) int {
     return count_stones(75, data)
 }
 
