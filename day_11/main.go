@@ -12,6 +12,15 @@ import (
 const data_file = "data.txt"
 const test_file = "test.txt"
 
+func insert_or_increment(data map[int]int, num int, count int) {
+    if _, found := data[num]; found {
+        data[num] += count
+    } else {
+        data[num] = count
+    }
+}
+
+
 func parse_input(input string) map[int]int {
     data := make(map[int]int)
     input = strings.TrimSuffix(input, "\n")
@@ -21,11 +30,7 @@ func parse_input(input string) map[int]int {
             fmt.Printf("Got `%s`", num_str)
             panic("Unreachable, input should be correct")
         }
-        if _, found := data[num]; found {
-            data[num] += 1
-        } else {
-            data[num] = 1
-        }
+        insert_or_increment(data, num, 1)
     }
     return data
 }
@@ -45,35 +50,15 @@ func even_digits(num int) (first int, second int, has_even bool)  {
 
 func count_stones(blinks int, data map[int]int) int {
     next := make(map[int]int)
-    for i := range blinks {
+    for range blinks {
         for val, count := range data {
             if val == 0 {
-                if _, found := next[1]; found {
-                    next[1] += count
-                } else {
-                    next[1] = count
-                }
+                insert_or_increment(next, 1, count)
             } else if a, b, even := even_digits(val); even {
-                if _, found := next[a]; found {
-                    next[a] += count
-                } else {
-                    next[a] = count
-                }
-                if _, found := next[b]; found {
-                    next[b] += count
-                } else {
-                    next[b] = count
-                }
-                if val == 72 && i == 4 {
-                    fmt.Println(next[2])
-                }
+                insert_or_increment(next, a, count)
+                insert_or_increment(next, b, count)
             } else {
-                num := val*2024
-                if _, found := next[num]; found {
-                    next[num] += count
-                } else {
-                    next[num] = count
-                }
+                insert_or_increment(next, val*2024, count)
             }
         }
         next, data = data, next
