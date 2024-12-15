@@ -3,6 +3,7 @@ package main
 import (
 	"log"
     "strings"
+    "slices"
     "strconv"
     "fmt"
 	"os"
@@ -55,16 +56,11 @@ func (v1 *Vector2) add(v2 Vector2, width int, height int) {
 func part_1(robots []Robot) int {
     const width = 101
     const height = 103
-    // const width = 11
-    // const height = 7
     for range 100 {
         for i := range robots {
             robots[i].pos.add(robots[i].vel, width, height)
         }
     }
-    // for _, r := range robots {
-    //     fmt.Printf("(%d %d)\n", r.pos.x, r.pos.y)
-    // }
     var quad_counts [4]int
     for _, robot := range robots {
         if robot.pos.x < width/2 && robot.pos.y < height/2 {
@@ -80,9 +76,38 @@ func part_1(robots []Robot) int {
     return quad_counts[0] * quad_counts[1] * quad_counts[2] * quad_counts[3]
 }
 
+func has_robot(robots []Robot, x int, y int) bool {
+    for _, robot := range robots {
+        if robot.pos.x == x && robot.pos.y == y {
+            return true
+        }
+    }
+    return false
+}
 
-func part_2(robots []Robot) int {
-    return 0;
+func part_2(robots []Robot) {
+    const width = 101
+    const height = 103
+    data := make([]byte, 0)
+    for i := range 10000 {
+        data = append(data, strconv.Itoa(i+1)...)
+        data = append(data, '\n')
+        for i := range robots {
+            robots[i].pos.add(robots[i].vel, width, height)
+        }
+        for y := range height {
+            for x := range width {
+                if has_robot(robots, x, y) {
+                    data = append(data, '#')
+                } else {
+                    data = append(data, ' ')
+                }
+            }
+            data = append(data, '\n')
+        }
+        data = append(data, "\n\n"...)
+    }
+    os.WriteFile("out.txt", data, 0666)
 }
 
 
@@ -93,8 +118,9 @@ func main() {
 	}
     input := string(data)
     robots := parse_input(input)
-    fmt.Println("Part 1: ", part_1(robots))
-    fmt.Println("Part 2: ", part_2(robots))
+    fmt.Println("Part 1: ", part_1(slices.Clone(robots)))
+    part_2(robots)
+    fmt.Println("Part 2: Generated out.txt")
 }
 
 
